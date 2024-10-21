@@ -1,0 +1,231 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #243b55;
+}
+
+html{
+    height:100%;
+}
+
+.login-box{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    padding: 40px;
+    transform: translate(-50%, -50%);
+    background:rgba(0,0,0,.5);
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.login-box h1{
+    margin: 0 0 30px;
+    text-align: center;
+    color: #fff;
+    padding: 0;
+}
+
+.login-box .user-box{
+    position: relative;
+}
+
+.login-box .user-box input{
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 1px solid #fff;
+    outline: none;
+    background: transparent;
+}
+
+.login-box .user-box label{
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px 0;
+    font-size: 16px;
+    color:#fff;
+    pointer-events: none;
+    transition: 0.5s;
+}
+
+.login-box .user-box input:focus ~ label,
+.login-box .user-box input:valid ~ label{
+    top: -20px;
+    font-size: 12px;
+    color: #03e9f4;
+    left: 0;
+}
+
+.login-box a{
+    text-decoration: none;
+}
+
+.login-box #loginForm #registerButton {
+    margin-left: 80px;
+    
+}
+
+
+
+.register-box{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    padding: 40px;
+    transform: translate(-50%, -50%);
+    background:rgba(0,0,0,.5);
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.register-box h1{
+    margin: 0 0 30px;
+    text-align: center;
+    color: #fff;
+    padding: 0;
+}
+
+.register-box .user-box{
+    position: relative;
+}
+
+.register-box .user-box input{
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 1px solid #fff;
+    outline: none;
+    background: transparent;
+}
+
+.register-box .user-box label{
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px 0;
+    font-size: 16px;
+    color:#fff;
+    pointer-events: none;
+    transition: 0.5s;
+}
+
+.register-box .user-box input:focus ~ label,
+.register-box .user-box input:valid ~ label{
+    top: -20px;
+    font-size: 12px;
+    color: #03e9f4;
+    left: 0;
+}
+
+.register-box a{
+    text-decoration: none;
+}
+
+.register-box #registerForm #volverlogin {
+    margin-left: 80px;
+    
+}
+
+
+
+
+.todolist-box{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 900px;
+    padding: 50px;
+    transform: translate(-50%, -50%);
+    background:rgba(0,0,0,.5);
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.todolist-box h1{
+    margin: 0 0 30px;
+    text-align: center;
+    color: #fff;
+    padding: 0;
+}
+
+.todolist-box .tasks-box{
+    position: relative;
+}
+
+.todolist-box .tasks-box input{
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #fff;
+    outline: none;
+    background: transparent;
+    border-radius: 5px;
+}
+.todolist-box .tasks-box input:hover{
+    border: 1px solid #03e9f4;
+
+}
+
+.todolist-box p{
+    color: #fff;
+}
+
+.todolist-box a{
+    text-decoration: none;
+}
+
+#ListaTareas{
+    margin-top: 20px;
+    list-style-type: none;
+    color: #fff ;
+}
+
+#ListaTareas li{
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-size: 24px;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="password"] {
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.btn-outline-danger, 
+.btn-outline-secondary,
+.btn-outline-success {
+    margin-left: 10px;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: gray;
+}

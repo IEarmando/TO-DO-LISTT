@@ -1,0 +1,61 @@
+services:
+
+  backend:
+    image: mysql:8.1
+    command: --default-authentication-plugin=caching_sha2_password
+    environment:
+      MYSQL_ROOT_PASSWORD: manguito
+      MYSQL_DATABASE: TO_DO_List
+      MYSQL_USER: manguito_user
+      MYSQL_PASSWORD: manguito
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    ports:  
+      - "3306:3306"
+    networks:
+      - manguito_network  
+
+  #backend:
+  # build:
+  #    context: ./application_backend
+  #   dockerfile: Dockerfile
+  #  volumes:
+  #    - ./mysql_data:/var/lib/mysql
+  #  ports:
+  #    - "3306:3306"
+  #  environment:
+  #    - PORT=3306
+  #   - DB_HOST=backend
+    #  - DB_USER=manguito_user
+    # - DB_PASSWORD=manguito
+      #- DB_NAME=TO_DO_List
+    # - SESSION_SECRET=clave-secreta
+    #networks:
+    # - manguito_network  
+
+
+
+  frontend:
+    build:
+      context: ./to-do-list_front_back
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DB_HOST=backend
+      - DB_USER=manguito_user
+      - DB_PASSWORD=manguito
+      - DB_NAME=TO_DO_List
+    depends_on:
+      - backend
+    networks:
+      - manguito_network  
+
+volumes:
+  mysql_data:
+
+networks:
+  manguito_network:
+    external: true  # Indica que esta red ya está creada y es externa
+
