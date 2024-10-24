@@ -1,5 +1,5 @@
-const InputTarea = document.getElementById('taskName'); // Coincide con el id del input en el HTML
-const btnadd = document.getElementById('taskForm'); // El form captura el submit
+const InputTarea = document.getElementById('taskName'); 
+const btnadd = document.getElementById('taskForm'); 
 const ListaTareas = document.getElementById('ListaTareas');
 const vacio = document.getElementById('vacio');
 
@@ -11,7 +11,6 @@ document.getElementById('btn-back').addEventListener('click', async (e) => {
 });
 
 
-// Escuchar el submit del formulario
 btnadd.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -48,7 +47,7 @@ async function loadTasks() {
     const response = await fetch('/api/tasks');
     const tasks = await response.json();
 
-    ListaTareas.innerHTML = ''; // Limpiamos la lista
+    ListaTareas.innerHTML = ''; 
 
     tasks.forEach(task => {
         const li = createTaskElement(task.name);
@@ -127,7 +126,7 @@ function AddEditBtn(li) {
             }
             li.textContent = nuevoTexto;
             li.appendChild(AddEditBtn(li));
-            li.appendChild(AddDeleteBtn(li));  // Pasamos 'li' para poder eliminarla
+            li.appendChild(AddDeleteBtn(li));  
             li.appendChild(AddCompleteBtn(li));
 
             await updateTaskInDatabase(tareaTexto, nuevoTexto, li.classList.contains('completed'));
@@ -160,7 +159,7 @@ function AddCompleteBtn(li) {
         li.classList.toggle('completed');
 
         const taskName = li.childNodes[0].nodeValue;
-        await updateTaskInDatabase(taskName, taskName, li.classList.contains('completed')); // Actualiza el estado de completado
+        await updateTaskInDatabase(taskName, taskName, li.classList.contains('completed')); 
         saveTasksToLocalStorage();
     });
 
