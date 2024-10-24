@@ -86,12 +86,15 @@ app.post('/api/registro', async (req, res) => {
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
 
+    console.log(`Usuario ingresado: ${username}`);
+    console.log(`Contraseña ingresada: ${password}`);
+
     if (!username || !password) {
         return res.status(400).json({ error: 'Faltan datos' });
     }
 
     // Buscar el usuario en la base de datos
-    db.query('SELECT * FROM users WHERE username = ?', [username], (err, results) => {
+    db.query('SELECT * FROM users WHERE LOWER(username) =LOWER(?)', [username], (err, results) => {
         if (err) throw err;
 
         if (results.length > 0) {
