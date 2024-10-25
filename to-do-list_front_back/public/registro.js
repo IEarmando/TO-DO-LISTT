@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+        //const username = document.getElementById('username').value;
+        //const password = document.getElementById('password').value;
 
         const response = await fetch('/api/registro', {
             method: 'POST',

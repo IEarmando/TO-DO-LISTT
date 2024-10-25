@@ -48,17 +48,6 @@ app.use(session({
     saveUninitialized: false
 }));
 
-
-
-/*db.connect((err) => {
-    if (err) {
-        console.error('Error conectando a la base de datos:', err);
-        return;
-    }
-    console.log('Conexión exitosa a la base de datoos MySQL');
-});
-*/
-
 // Ruta para registrar usuarios
 app.post('/api/registro', async (req, res) => {
     const { username, password } = req.body;
@@ -94,7 +83,7 @@ app.post('/api/login', (req, res) => {
     }
 
     // Buscar el usuario en la base de datos
-    db.query('SELECT * FROM users WHERE LOWER(username) =LOWER(?)', [username], (err, results) => {
+    db.query('SELECT * FROM users WHERE username = ?', [username], (err, results) => {
         if (err) throw err;
 
         if (results.length > 0) {
