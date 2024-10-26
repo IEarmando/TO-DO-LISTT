@@ -15,7 +15,7 @@ body {
     border-radius: 8px;
     padding: 2rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    width: 320px;
+    width: 400px;
     text-align: center;
 }
 
@@ -49,7 +49,7 @@ body {
 
 .user-box label {
     position: absolute;
-    top: -1.2rem;
+    top: -1.1rem;
     left: 0;
     font-size: 0.9rem;
     color: #8c8c8c;
@@ -58,7 +58,7 @@ body {
 
 .user-box input:focus ~ label,
 .user-box input:not(:placeholder-shown) ~ label {
-    top: -1.8rem;
+    top: -1.4rem;
     font-size: 0.8rem;
     color: #1fa2ff;
 }
@@ -72,11 +72,10 @@ button {
     padding: 0.8rem;
     margin-top: 1rem;
     transition: 0.3s;
-    /*margin-left: 10px;*/
 }
 
 button.btn-sm{
-    margin-left: 10px;
+    margin-left: 8px;
 }
 
 button.btn-outline-primary {
@@ -104,13 +103,18 @@ button.btn-outline-succes:hover {
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    width: 400px;
-    max-width: 100%;
+    width: 800px;
+    max-width: 120%;
     text-align: center;
 }
 
 #addButton{
     border-radius: 4px;
+    width: 50%;
+}
+
+#logoutButton{
+    width: 50%;
 }
 
 #vacio {
@@ -131,9 +135,10 @@ button.btn-outline-succes:hover {
     border-radius: 4px;
     margin-bottom: 0.5rem;
     display: flex;
-    justify-content: space-between;
+    justify-content:flex-end;
     align-items: center;
     font-size: 1rem;
+    white-space: nowrap;
 }
 
 #ListaTareas li.completed {

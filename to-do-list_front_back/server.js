@@ -9,7 +9,7 @@ require('dotenv').config();
 
 // Configurar la conexión a la base de datos MySQL
 const db = mysql.createConnection({
-    host: process.env.DB_HOST || '172.19.0.2',
+    host: process.env.DB_HOST || 'backend',
     user: process.env.DB_USER || 'manguito_user',
     password: process.env.DB_PASSWORD || 'manguito',
     database: process.env.DB_NAME || 'TO_DO_List'
