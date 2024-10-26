@@ -5,7 +5,6 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const path = require('path');
 
-// Cargar variables de entorno
 require('dotenv').config();
 
 // Configurar la conexión a la base de datos MySQL
@@ -119,7 +118,7 @@ app.post('/api/logout', (req, res) => {
     });
 });
 
-// Ruta para agregar tareas (requiere autenticación)
+// Ruta para agregar tareas
 app.post('/api/tasks', (req, res) => {
     const task = req.body;
     const userId = req.session.userId;

@@ -26,7 +26,6 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     }
 });
 
-// Manejo del botón de registro
 document.getElementById('registerButton').addEventListener('click', () => {
     window.location.href = 'registro.html';
 });
