@@ -1,209 +1,161 @@
-const InputTarea = document.getElementById('taskName'); 
-const btnadd = document.getElementById('taskForm'); 
-const ListaTareas = document.getElementById('ListaTareas');
-const vacio = document.getElementById('vacio');
+document.addEventListener('DOMContentLoaded', loadTasks);
 
-document.addEventListener("DOMContentLoaded", loadTasksFromLocalStorage);
-
-document.getElementById('btn-back').addEventListener('click', async (e) => {
-    e.preventDefault();
-    window.location.href = 'index.html';
-});
-
-
-btnadd.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const Tarea = InputTarea.value;
-    if (Tarea === '') {
-        alert('Por favor ingrese una tarea, no puede estar vacío el campo');
-        return;
+document.getElementById('addButton').addEventListener('click', async () => {
+    const taskInput = document.getElementById('tarea');
+    const taskName = taskInput.value.trim();
+    if (taskName) {
+        await addTask(taskName);
+        taskInput.value = '';
+    } else {
+        alert('Por favor, ingresa una tarea');
     }
-
-    const li = createTaskElement(Tarea);
-    ListaTareas.appendChild(li);
-
-    InputTarea.value = '';
-
-    vacio.style.display = "none";
-
-    // Guarda la tarea en el localStorage y en la base de datos
-    await saveTaskToDatabase(Tarea, false); 
-    saveTasksToLocalStorage();
 });
 
-function createTaskElement(taskText) {
-    const li = document.createElement('li');
-    li.textContent = taskText;
-
-    li.appendChild(AddEditBtn(li));
-    li.appendChild(AddDeleteBtn(li));  
-    li.appendChild(AddCompleteBtn(li));
-
-    return li;
-}
+document.getElementById('logoutButton').addEventListener('click', async () => {
+    try {
+        await fetch('/api/logout', {
+            method: 'POST'
+        });
+        sessionStorage.removeItem('userId');
+        window.location.href = 'index.html';
+    } catch (error) {
+        console.error('Error al cerrar sesión:', error);
+    }
+});
 
 async function loadTasks() {
-    const response = await fetch('/api/tasks');
-    const tasks = await response.json();
+    try {
+        const response = await fetch('/api/tasks');
+        const tasks = await response.json();
 
-    ListaTareas.innerHTML = ''; 
+        const taskList = document.getElementById('ListaTareas');
+        taskList.innerHTML = ''; 
 
-    tasks.forEach(task => {
-        const li = createTaskElement(task.name);
-        if (task.completed) {
-            li.classList.add('completed');
-        }
-        ListaTareas.appendChild(li);
-    });
-}
-
-async function saveTaskToDatabase(taskName, completed) {
-    const response = await fetch('/api/tasks', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: taskName, completed: completed })
-    });
-
-    if (!response.ok) {
-        console.error('Error al guardar la tarea en la base de datos');
-    }
-}
-
-function AddDeleteBtn(li) {
-    const btnDelete = document.createElement('button');
-    btnDelete.textContent = 'Eliminar';
-    btnDelete.className = "btn btn-outline-danger";
-
-    btnDelete.addEventListener('click', async () => {
-        const taskName = li.childNodes[0].nodeValue;
-        await deleteTaskFromDatabase(taskName); // Eliminar de la base de datos
-        ListaTareas.removeChild(li);
-
-        if (ListaTareas.children.length === 0) {
-            vacio.style.display = "block";
+        if (tasks.length === 0) {
+            document.getElementById('vacio').style.display = 'block';
+            return;
         }
 
-        saveTasksToLocalStorage();
-    });
-    return btnDelete;
-}
+        document.getElementById('vacio').style.display = 'none';
 
-async function deleteTaskFromDatabase(taskName) {
-    const response = await fetch(`/api/tasks/${encodeURIComponent(taskName)}`, {
-        method: 'DELETE'
-    });
-
-    if (!response.ok) {
-        console.error('Error al eliminar la tarea en la base de datos');
-    }
-}
-
-function AddEditBtn(li) {
-    const btnEdit = document.createElement('button');
-    btnEdit.textContent = 'Editar';
-    btnEdit.className = "btn btn-outline-secondary";
-
-    btnEdit.addEventListener('click', () => {
-        const tareaTexto = li.childNodes[0].nodeValue;
-
-        const inputEdit = document.createElement('input');
-        inputEdit.type = 'text';
-        inputEdit.value = tareaTexto;
-
-        li.textContent = '';
-        li.appendChild(inputEdit);
-
-        const btnGuardar = document.createElement('button');
-        btnGuardar.textContent = 'Guardar';
-        btnGuardar.className = "btn btn-outline-warning";
-
-        btnGuardar.addEventListener('click', async () => {
-            const nuevoTexto = inputEdit.value;
-            if (nuevoTexto === '') {
-                alert('La tarea no puede estar vacía');
-                return;
-            }
-            li.textContent = nuevoTexto;
-            li.appendChild(AddEditBtn(li));
-            li.appendChild(AddDeleteBtn(li));  
-            li.appendChild(AddCompleteBtn(li));
-
-            await updateTaskInDatabase(tareaTexto, nuevoTexto, li.classList.contains('completed'));
-            saveTasksToLocalStorage();
-        });
-
-        li.appendChild(btnGuardar);
-    });
-
-    return btnEdit;
-}
-
-async function updateTaskInDatabase(oldTaskName, newTaskName, completed) {
-    const response = await fetch(`/api/tasks/${encodeURIComponent(oldTaskName)}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: newTaskName, completed: completed })
-    });
-
-    if (!response.ok) {
-        console.error('Error al actualizar la tarea en la base de datos');
-    }
-}
-
-function AddCompleteBtn(li) {
-    const btnComplete = document.createElement('button');
-    btnComplete.textContent = 'Completada';
-    btnComplete.className = "btn btn-outline-success"
-    btnComplete.addEventListener('click', async () => {
-        li.classList.toggle('completed');
-
-        const taskName = li.childNodes[0].nodeValue;
-        await updateTaskInDatabase(taskName, taskName, li.classList.contains('completed')); 
-        saveTasksToLocalStorage();
-    });
-
-    return btnComplete;
-}
-
-function saveTasksToLocalStorage() {
-    const tasks = [];
-    const taskElements = ListaTareas.getElementsByTagName('li');
-
-    for (let task of taskElements) {
-        tasks.push({
-            text: task.childNodes[0].nodeValue,
-            completed: task.classList.contains('completed')
-        });
-    }
-
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-}
-
-function loadTasksFromLocalStorage() {
-    const tasks = JSON.parse(localStorage.getItem('tasks'));
-
-    if (tasks && tasks.length > 0) {
         tasks.forEach(task => {
-            const li = createTaskElement(task.text);
+            const li = document.createElement('li');
+            li.textContent = task.name;
+            li.dataset.id = task.id;
+            
             if (task.completed) {
                 li.classList.add('completed');
             }
-            ListaTareas.appendChild(li);
+            
+            const completeButton = document.createElement('button');
+            completeButton.textContent = task.completed ? 'Desmarcar' : 'Completar';
+            completeButton.className = 'btn btn-success btn-sm';
+            completeButton.onclick = () => markAsCompleted(task.id, !task.completed);
+        
+            const editButton = document.createElement('button');
+            editButton.textContent = 'Editar';
+            editButton.className = 'btn btn-warning btn-sm';
+            editButton.onclick = () => editTask(task.id, task.name);
+        
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Eliminar';
+            deleteButton.className = 'btn btn-danger btn-sm';
+            deleteButton.onclick = () => deleteTask(task.id);
+        
+            li.appendChild(completeButton);
+            li.appendChild(editButton);
+            li.appendChild(deleteButton);
+            taskList.appendChild(li);
         });
+        
 
-        vacio.style.display = "none";
-    } else {
-        vacio.style.display = "block";
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    } catch (error) {
+        console.error('Error al cargar tareas:', error);
     }
 }
 
-const style = document.createElement('style');
-style.innerHTML = 
-`
-    .completed {
-        text-decoration: line-through;
-        color: gray;
+// Agregar tarea
+async function addTask(taskName) {
+    try {
+        const response = await fetch('/api/tasks', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: taskName })
+        });
+
+        if (response.ok) {
+            loadTasks();
+        } else {
+            alert('Error al agregar tarea');
+        }
+    } catch (error) {
+        console.error('Error al agregar tarea:', error);
     }
-`;
-document.head.appendChild(style);
+}
+
+// Marcar tarea como completada
+async function markAsCompleted(taskId, completed) {
+    try {
+        const response = await fetch(`/api/tasks/${taskId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ completed })
+        });
+
+        if (response.ok) {
+            loadTasks(); 
+        } else {
+            alert('Error al cambiar estado de la tarea');
+        }
+    } catch (error) {
+        console.error('Error al marcar tarea:', error);
+    }
+}
+
+// Editar tarea
+async function editTask(taskId, currentName) {
+    const newName = prompt('Editar tarea:', currentName);
+    if (newName) {
+        try {
+            const response = await fetch(`/api/tasks/${taskId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: newName })
+            });
+
+            if (response.ok) {
+                loadTasks(); 
+            } else {
+                alert('Error al editar la tarea');
+            }
+        } catch (error) {
+            console.error('Error al editar tarea:', error);
+        }
+    }
+}
+
+// Eliminar tarea
+async function deleteTask(taskId) {
+    if (confirm('¿Estás seguro de que deseas eliminar esta tarea?')) {
+        try {
+            const response = await fetch(`/api/tasks/${taskId}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                loadTasks(); 
+            } else {
+                alert('Error al eliminar tarea');
+            }
+        } catch (error) {
+            console.error('Error al eliminar tarea:', error);
+        }
+    }
+}

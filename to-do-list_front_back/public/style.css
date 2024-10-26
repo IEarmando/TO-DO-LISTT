@@ -1,231 +1,159 @@
+
 body {
+    font-family: 'Roboto', sans-serif;
+    background: #1e1e2f;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
     margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #243b55;
 }
 
-html{
-    height:100%;
-}
-
-.login-box{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 400px;
-    padding: 40px;
-    transform: translate(-50%, -50%);
-    background:rgba(0,0,0,.5);
-    box-sizing: border-box;
-    border-radius: 10px;
-}
-
-.login-box h1{
-    margin: 0 0 30px;
+.login-box, .register-box {
+    background: #2d2d44;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    width: 320px;
     text-align: center;
-    color: #fff;
-    padding: 0;
 }
 
-.login-box .user-box{
+.login-box h1, .register-box h1, .container h1 {
+    font-size: 1.8rem;
+    color: #1fa2ff;
+    margin-bottom: 1.5rem;
+}
+
+.user-box {
     position: relative;
+    margin-bottom: 1.5rem;
 }
 
-.login-box .user-box input{
+.user-box input {
     width: 100%;
-    padding: 10px 0;
-    font-size: 16px;
-    color: #fff;
-    margin-bottom: 30px;
+    padding: 0.8rem;
+    background: #343454;
+    color: #1fa2ff;
     border: none;
-    border-bottom: 1px solid #fff;
+    border-radius: 4px;
+    font-size: 1rem;
     outline: none;
-    background: transparent;
+    transition: all 0.3s;
 }
 
-.login-box .user-box label{
+.user-box input:focus {
+    background: #2d2d44;
+    color: #f7f7ff;
+}
+
+.user-box label {
     position: absolute;
-    top: 0;
+    top: -1.2rem;
     left: 0;
-    padding: 10px 0;
-    font-size: 16px;
-    color:#fff;
-    pointer-events: none;
-    transition: 0.5s;
+    font-size: 0.9rem;
+    color: #8c8c8c;
+    transition: all 0.3s;
 }
 
-.login-box .user-box input:focus ~ label,
-.login-box .user-box input:valid ~ label{
-    top: -20px;
-    font-size: 12px;
-    color: #03e9f4;
-    left: 0;
-}
-
-.login-box a{
-    text-decoration: none;
-}
-
-.login-box #loginForm #registerButton {
-    margin-left: 80px;
-    
-}
-
-
-
-.register-box{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 400px;
-    padding: 40px;
-    transform: translate(-50%, -50%);
-    background:rgba(0,0,0,.5);
-    box-sizing: border-box;
-    border-radius: 10px;
-}
-
-.register-box h1{
-    margin: 0 0 30px;
-    text-align: center;
-    color: #fff;
-    padding: 0;
-}
-
-.register-box .user-box{
-    position: relative;
-}
-
-.register-box .user-box input{
-    width: 100%;
-    padding: 10px 0;
-    font-size: 16px;
-    color: #fff;
-    margin-bottom: 30px;
-    border: none;
-    border-bottom: 1px solid #fff;
-    outline: none;
-    background: transparent;
-}
-
-.register-box .user-box label{
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 10px 0;
-    font-size: 16px;
-    color:#fff;
-    pointer-events: none;
-    transition: 0.5s;
-}
-
-.register-box .user-box input:focus ~ label,
-.register-box .user-box input:valid ~ label{
-    top: -20px;
-    font-size: 12px;
-    color: #03e9f4;
-    left: 0;
-}
-
-.register-box a{
-    text-decoration: none;
-}
-
-.register-box #registerForm #volverlogin {
-    margin-left: 80px;
-    
-}
-
-
-
-
-.todolist-box{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 900px;
-    padding: 50px;
-    transform: translate(-50%, -50%);
-    background:rgba(0,0,0,.5);
-    box-sizing: border-box;
-    border-radius: 10px;
-}
-
-.todolist-box h1{
-    margin: 0 0 30px;
-    text-align: center;
-    color: #fff;
-    padding: 0;
-}
-
-.todolist-box .tasks-box{
-    position: relative;
-}
-
-.todolist-box .tasks-box input{
-    width: 100%;
-    padding: 10px 0;
-    font-size: 16px;
-    color: #fff;
-    margin-bottom: 30px;
-    border-bottom: 1px solid #fff;
-    outline: none;
-    background: transparent;
-    border-radius: 5px;
-}
-.todolist-box .tasks-box input:hover{
-    border: 1px solid #03e9f4;
-
-}
-
-.todolist-box p{
-    color: #fff;
-}
-
-.todolist-box a{
-    text-decoration: none;
-}
-
-#ListaTareas{
-    margin-top: 20px;
-    list-style-type: none;
-    color: #fff ;
-}
-
-#ListaTareas li{
-    margin-bottom: 10px;
-}
-
-h1 {
-    font-size: 24px;
-}
-
-form {
-    margin-bottom: 20px;
-}
-
-input[type="text"],
-input[type="password"] {
-    padding: 10px;
-    margin-right: 10px;
-    border: 1px solid #ccc;
+.user-box input:focus ~ label,
+.user-box input:not(:placeholder-shown) ~ label {
+    top: -1.8rem;
+    font-size: 0.8rem;
+    color: #1fa2ff;
 }
 
 button {
-    padding: 10px 15px;
-    border: none;
-    color: white;
     cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    width: 100%;
+    border-radius: 4px;
+    padding: 0.8rem;
+    margin-top: 1rem;
+    transition: 0.3s;
+    /*margin-left: 10px;*/
 }
 
-.btn-outline-danger, 
-.btn-outline-secondary,
-.btn-outline-success {
+button.btn-sm{
     margin-left: 10px;
 }
 
-.completed {
+button.btn-outline-primary {
+    color: #1fa2ff;
+    border-color: #1fa2ff;
+}
+
+button.btn-outline-primary:hover {
+    background-color: #1fa2ff;
+    color: #fff;
+}
+
+button.btn-outline-succes {
+    color: #4caf50;
+    border-color: #4caf50;
+}
+
+button.btn-outline-succes:hover {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+.container {
+    background: #2d2d44;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    width: 400px;
+    max-width: 100%;
+    text-align: center;
+}
+
+#addButton{
+    border-radius: 4px;
+}
+
+#vacio {
+    font-size: 1rem;
+    color: #8c8c8c;
+    margin: 1rem 0;
+}
+
+#ListaTareas {
+    list-style: none;
+    padding: 0;
+}
+
+#ListaTareas li {
+    background: #343454;
+    color: #fff;
+    padding: 0.8rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+}
+
+#ListaTareas li.completed {
     text-decoration: line-through;
-    color: gray;
+    color: #8c8c8c;
+}
+
+.input-group {
+    display: flex;
+}
+
+.input-group input {
+    background: #343454;
+    color: #1fa2ff;
+}
+
+.input-group input::placeholder {
+    color: #8c8c8c;
+}
+
+input, button {
+    transition: background 0.3s ease, color 0.3s ease;
 }
