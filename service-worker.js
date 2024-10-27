@@ -4,13 +4,13 @@ const urlsToCache = [
     '/manifest.json',
     '/icon-192x192.png',
     '/icon-512x512.png',
-    '/to-do-list_front_back/public/index.html',
-    '/to-do-list_front_back/public/index.js',
-    '/to-do-list_front_back/public/registro.html',
-    '/to-do-list_front_back/public/registro.js',
-    '/to-do-list_front_back/public/todolist.html',
-    '/to-do-list_front_back/public/todolist.js',
-    '/to-do-list_front_back/public/style.css'
+    './to-do-list_front_back/public/index.html',
+    './to-do-list_front_back/public/index.js',
+    './to-do-list_front_back/public/registro.html',
+    './to-do-list_front_back/public/registro.js',
+    './to-do-list_front_back/public/todolist.html',
+    './to-do-list_front_back/public/todolist.js',
+    './to-do-list_front_back/public/style.css'
 ];
 
 self.addEventListener('install', event => {

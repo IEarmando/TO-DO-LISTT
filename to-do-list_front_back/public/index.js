@@ -30,6 +30,7 @@ document.getElementById('registerButton').addEventListener('click', () => {
     window.location.href = 'registro.html';
 });
 
+//implementar pwa
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/service-worker.js')
