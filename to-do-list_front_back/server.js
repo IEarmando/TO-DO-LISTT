@@ -7,6 +7,12 @@ const path = require('path');
 
 require('dotenv').config();
 
+// Iniciar el servidor
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
+
+
 // Configurar la conexión a la base de datos MySQL
 const db = mysql.createConnection({
     host: process.env.DB_HOST || 'backend',
@@ -217,9 +223,4 @@ app.delete('/api/tasks/:id', (req, res) => {
             res.send('Tarea eliminada con éxito');
         }
     });
-});
-
-// Iniciar el servidor
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
