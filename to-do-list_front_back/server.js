@@ -37,14 +37,13 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Servir archivos estáticos desde la carpeta 'public'
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'client')));
 
 // Configurar sesiones
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
 }));
 
 // Ruta para registrar usuarios
@@ -55,24 +54,41 @@ app.post('/api/registro', async (req, res) => {
         return res.status(400).json({ error: 'Faltan datos de registro' });
     }
 
-    try {
-        const hashedPassword = await bcrypt.hash(password.toString(), 10);
-
-        const sql = 'INSERT INTO users (username, password) VALUES (?, ?)';
-        db.query(sql, [username, hashedPassword], (err, result) => {
-            if (err) {
-                console.error('Error al registrar usuario:', err);
-                res.status(500).send('Error al registrar usuario');
-            } else {
-                console.log('Usuario registrado con éxito:', result.insertId);
-                res.send({ id: result.insertId });
-            }
-        });
-    } catch (error) {
-        console.error('Error al encriptar contraseña:', error);
-        res.status(500).send('Error al registrar usuario');
+    if (password.length < 8){
+        return res.status(400).json({ message: 'Contraseña demasiado corta (minimo 8 digitos)' });
     }
+
+    // Verificar si el nombre de usuario ya está en uso
+    db.query('SELECT * FROM users WHERE username = ?', [username], (err, results) => {
+        if (err) {
+            console.error('Error al verificar usuario:', err);
+            return res.status(500).send('Error al verificar usuario');
+        }
+
+        if (results.length > 0) {
+            return res.status(400).json({ message: 'Este usuario ya existe' });
+        }
+
+        bcrypt.hash(password.toString(), 10, (err, hashedPassword) => {
+            if (err) {
+                console.error('Error al encriptar contraseña:', err);
+                return res.status(500).send('Error al registrar usuario');
+            }
+
+            const sql = 'INSERT INTO users (username, password) VALUES (?, ?)';
+            db.query(sql, [username, hashedPassword], (err, result) => {
+                if (err) {
+                    console.error('Error al registrar usuario:', err);
+                    res.status(500).send('Error al registrar usuario');
+                } else {
+                    console.log('Usuario registrado con éxito:', result.insertId);
+                    res.send({ id: result.insertId });
+                }
+            });
+        });
+    });
 });
+
 
 // Ruta para iniciar sesión
 app.post('/api/login', (req, res) => {
@@ -170,7 +186,7 @@ app.put('/api/tasks/:id', (req, res) => {
     }
 
     const sql = 'UPDATE tasks SET name = ? WHERE id_user = ? AND id = ?';
-    db.query(sql, [name, userId, taskId], (err, result) => {
+    db.query(sql, [name, userId, taskId], (err) => {
         if (err) {
             console.error('Error al editar la tarea:', err);
             res.status(500).send('Error al editar la tarea');

@@ -4,7 +4,6 @@ services:
 
   backend:
     image: mysql:8.1
-    command: --default-authentication-plugin=caching_sha2_password
     environment:
       MYSQL_ROOT_PASSWORD: manguito
       MYSQL_DATABASE: TO_DO_List

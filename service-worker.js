@@ -1,43 +1,45 @@
-const CACHE_NAME = 'task-app-cache-v1';
-const urlsToCache = [
-    '/',
-    '/manifest.json',
-    '/icon-192x192.png',
-    '/icon-512x512.png',
-    './to-do-list_front_back/public/index.html',
-    './to-do-list_front_back/public/index.js',
-    './to-do-list_front_back/public/registro.html',
-    './to-do-list_front_back/public/registro.js',
-    './to-do-list_front_back/public/todolist.html',
-    './to-do-list_front_back/public/todolist.js',
-    './to-do-list_front_back/public/style.css'
-];
-
-self.addEventListener('install', event => {
+self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(urlsToCache))
+        caches.open('my-cache').then((cache) => {
+            return cache.addAll([
+                '/', 
+                './to-do-list_front_back/client/index.html',
+                './to-do-list_front_back/client/style.css', 
+                './to-do-list_front_back/client/index.js', 
+                './to-do-list_front_back/client/registro.html',
+                './to-do-list_front_back/client/registro.js',
+                './to-do-list_front_back/client/todolist.html',
+                './to-do-list_front_back/client/todolist.js',
+                './to-do-list_front_back/server.js',
+                './images/icon-192x192.png', 
+                './images/icon-512x512.png'
+            ]);
+        })
     );
 });
 
-self.addEventListener('fetch', event => {
+self.addEventListener('fetch', (event) => {
     event.respondWith(
-        caches.match(event.request)
-            .then(response => response || fetch(event.request))
+        caches.match(event.request).then((cachedResponse) => {
+            if (cachedResponse) {
+                return cachedResponse;
+            }
+            return fetch(event.request);
+        })
     );
 });
 
-self.addEventListener('activate', event => {
-    const cacheWhitelist = [CACHE_NAME];
+self.addEventListener('activate', (event) => {
+    const cacheWhitelist = ['my-cache'];
     event.waitUntil(
-        caches.keys().then(cacheNames =>
-            Promise.all(
-                cacheNames.map(cacheName => {
+        caches.keys().then((cacheNames) => {
+            return Promise.all(
+                cacheNames.map((cacheName) => {
                     if (!cacheWhitelist.includes(cacheName)) {
                         return caches.delete(cacheName);
                     }
                 })
-            )
-        )
+            );
+        })
     );
 });

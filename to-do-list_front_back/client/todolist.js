@@ -119,26 +119,50 @@ async function markAsCompleted(taskId, completed) {
 
 // Editar tarea
 async function editTask(taskId, currentName) {
-    const newName = prompt('Editar tarea:', currentName);
-    if (newName) {
-        try {
-            const response = await fetch(`/api/tasks/${taskId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ name: newName })
-            });
 
-            if (response.ok) {
-                loadTasks(); 
-            } else {
-                alert('Error al editar la tarea');
+    const taskElement = document.querySelector(`li[data-id="${taskId}"]`);
+    
+    if (taskElement.querySelector('.edit-input')) return;
+
+    const editInput = document.createElement('input');
+    editInput.type = 'text';
+    editInput.value = currentName;
+    editInput.classList.add('edit-input');
+
+    const saveButton = document.createElement('button');
+    saveButton.textContent = 'Guardar';
+    saveButton.className = 'btn btn-warning btn-sm';
+
+    taskElement.innerHTML = '';
+    taskElement.appendChild(editInput);
+    taskElement.appendChild(saveButton);
+
+    saveButton.addEventListener('click', async () => {
+        const newName = editInput.value.trim();
+
+        // Solo continuar si el nombre cambió y no esta vacio
+        if (newName && newName !== currentName) {
+            try {
+                const response = await fetch(`/api/tasks/${taskId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: newName })
+                });
+
+                if (response.ok) {
+                    loadTasks();
+                } else {
+                    alert('Error al editar la tarea');
+                }
+            } catch (error) {
+                console.error('Error al editar tarea:', error);
             }
-        } catch (error) {
-            console.error('Error al editar tarea:', error);
+        } else {
+            loadTasks();
         }
-    }
+    });
 }
 
 // Eliminar tarea
@@ -150,7 +174,11 @@ async function deleteTask(taskId) {
             });
 
             if (response.ok) {
-                loadTasks(); 
+                let tasks = JSON.parse(localStorage.getItem('tasks'));
+                tasks = tasks.filter(task => task.id !== taskId); // Filtrar la tarea eliminada
+                localStorage.setItem('tasks', JSON.stringify(tasks)); // Actualizar el localStorage
+
+                loadTasks();
             } else {
                 alert('Error al eliminar tarea');
             }

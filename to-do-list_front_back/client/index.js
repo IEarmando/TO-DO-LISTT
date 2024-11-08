@@ -34,11 +34,11 @@ document.getElementById('registerButton').addEventListener('click', () => {
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/service-worker.js')
-            .then(registration => {
+            .then((registration) => {
                 console.log('Service Worker registrado con éxito:', registration);
             })
-            .catch(error => {
-                console.log('Error en el registro del Service Worker:', error);
+            .catch((error) => {
+                console.log('Error al registrar el Service Worker:', error);
             });
     });
 }
